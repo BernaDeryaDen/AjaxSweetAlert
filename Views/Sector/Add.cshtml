@@ -1,0 +1,71 @@
+﻿const { data } = require("jquery");
+
+@model AjaxSweetAlert.Models.Sector
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+	<div class="col-xxl-12">
+		<div class="card-header mb-5">
+			<h3>
+				Add New Sector
+			</h3>
+
+		</div>
+		<div class="card-body">
+
+			<form id="ajaxAddPost" asp-action="Add">
+				<<div asp-validation-summary="ModelOnly" class="text-danger">
+				</div>
+				<div>
+
+					<label asp-for-="Description" class="form-label"></label>
+					<input asp-for="Description" class="form-control" />
+					<span asp-validation-for="Description" class="text-danger"></span>
+				</div>
+				<input class="btn btn-primary" type="button" value="submit" onclick="addAjaxFunc()" />
+			</form>
+		</div>
+
+	</div>
+
+
+</div>
+
+
+@section scripts{
+<script type="text/javascript">
+
+	var addAjaxFunc=function(){
+
+		$.ajax({
+			type:"POST",
+			url:"/Sector/Add",
+			data:$("#ajaxAddPost").serialize(),
+			contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+			success:function(modeldenGelenCevap){
+
+				Swal.fire
+				({
+						title:(modeldenGelenCevap=="ok")?"Kaydetme işlemi başarılı": "Hata oldu!",
+						position:'top-end',
+						icon:(modeldenGelenCevap=="ok")?'success':'error'
+						timer:2000,
+						timerProgressBar:true,
+						showConfirmButton:false,
+				}).then(function(result){
+					if(Response=="ok")
+					window.location.href="/Sector/Index";
+				})
+			},
+			error:function(){
+				alert("oh noo hata oldu!!!");
+			}
+
+		});
+	}
+
+
+</script>
+}
